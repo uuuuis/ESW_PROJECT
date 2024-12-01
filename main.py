@@ -119,43 +119,37 @@ def create_stage(stage_number, joystick_width, joystick_height):
 
 
 def show_game_over_message(joystick):
-    # 게임 종료 메시지 배경 설정
     width, height = joystick.width, joystick.height
-    message_background = Image.new("RGB", (width, height), (0, 0, 0))  # 검은색 배경
+    message_background = Image.new("RGB", (width, height), (0, 0, 0))
     draw = ImageDraw.Draw(message_background)
 
-    # 폰트 설정
     try:
         font_path = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
-        font = ImageFont.truetype(font_path, 24)  # 글씨 크기 24
+        font = ImageFont.truetype(font_path, 24)
     except IOError:
         print("Font not found. Exiting...")
         exit(1)
 
-    # 표시할 메시지
     message = "Congratulation!\nGame Clear!"
-    text_color = (255, 255, 255)  # 흰색
+    text_color = (255, 255, 255) 
 
-    # 메시지 줄 나누기 및 텍스트 크기 계산
     lines = message.split("\n")
     total_text_height = 0
     line_dimensions = []
 
     for line in lines:
-        bbox = draw.textbbox((0, 0), line, font=font)  # 텍스트 크기를 Bounding Box로 계산
+        bbox = draw.textbbox((0, 0), line, font=font) 
         text_width = bbox[2] - bbox[0]
         text_height = bbox[3] - bbox[1]
-        total_text_height += text_height + 10  # 줄 간격 포함
+        total_text_height += text_height + 10 
         line_dimensions.append((text_width, text_height))
 
-    # 텍스트를 화면 중앙에 정렬
     current_y = (height - total_text_height) // 2
     for line, (text_width, text_height) in zip(lines, line_dimensions):
         x = (width - text_width) // 2
         draw.text((x, current_y), line, font=font, fill=text_color)
         current_y += text_height + 10
 
-    # 메시지 표시
     joystick.disp.image(message_background)
     time.sleep(3) 
 
@@ -183,7 +177,6 @@ def main():
                         [x0, y0, x0 + cell_size, y0 + cell_size], fill=(0, 0, 0)
                     )
 
-        # 목표 지점을 녹색 사각형으로 표시
         goal_size = cell_size - 3
         goal_x, goal_y = goal_position[0], goal_position[1]
         background_draw.rectangle(
@@ -233,8 +226,6 @@ def main():
                 character.set_position(start_position)
 
 
-            
-            # 목표 도달 여부 확인 (goal_size 추가 전달)
             if character.is_at_goal(goal_position, goal_size):
                  stage_cleared = True
                  break
